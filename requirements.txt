@@ -1,0 +1,14 @@
+Flask
+google-genai
+moviepy
+whisper
+torch
+coqui-tts
+soundfile
+noisereduce
+librosa
+numpy
+Pillow
+opencv-python
+requests
+gunicorn

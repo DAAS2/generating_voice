@@ -1,0 +1,4 @@
+website:
+- Add Page for prompts, you can generate prompt then see it 
+- Page for audio, with audio settings for each voice
+- Page for Final Product - Join prompt, audio
