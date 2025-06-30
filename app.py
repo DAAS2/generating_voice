@@ -2,9 +2,7 @@
 
 import streamlit as st
 import os
-license_agreement = st.secrets.coqui_license.agreement
-if license_agreement == "non-commercial":
-    os.environ["COQUI_LICENSE"] = "non-commercial"
+os.environ["COQUI_LICENSE"] = "non-commercial"
 import google.generativeai as genai
 import time
 import random

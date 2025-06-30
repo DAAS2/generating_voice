@@ -1,9 +1,7 @@
 import os
 import streamlit as st
 import torch
-license_agreement = st.secrets.coqui_license.agreement
-if license_agreement == "non-commercial":
-    os.environ["COQUI_LICENSE"] = "non-commercial"
+os.environ["COQUI_LICENSE"] = "non-commercial"
 from TTS.api import TTS
 import soundfile as sf  # For reliable audio saving
 import noisereduce as nr  # Optional
@@ -81,17 +79,3 @@ def duplicate_audio(text):
     except Exception as e:
         print(f"Voice duplication failed: {e}")
         return None
-
-if __name__ == "__main__":
-    # Example usage
-    text = """
-    [Boy] Bro you won't believe what happened at the gym
-    [Girl] Spill the tea bestie
-    [Boy] This dude was flexing hard in the mirror no cap
-    [Girl] Standard gym behaviour bruh
-    [Boy] But he was flexing his teeth
-    [Girl] Wait what SFX laugh
-    [Boy] Dead serious He even winked at himself
-    [Girl] That's my dad He's been practicing for his dentures
-    """.strip()
-    duplicate_audio(text)
