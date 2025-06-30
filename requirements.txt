@@ -1,5 +1,6 @@
 librosa==0.11.0
-pyaudio
+numba==0.61.2
+ffmpeg-python
 SpeechRecognition
 streamlit
 google-generativeai
@@ -12,4 +13,5 @@ noisereduce
 librosa
 numpy
 gtts
+pyaudio
 
