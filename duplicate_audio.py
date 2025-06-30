@@ -1,5 +1,9 @@
 import os
+import streamlit as st
 import torch
+license_agreement = st.secrets.coqui_license.agreement
+if license_agreement == "non-commercial":
+    os.environ["COQUI_LICENSE"] = "non-commercial"
 from TTS.api import TTS
 import soundfile as sf  # For reliable audio saving
 import noisereduce as nr  # Optional
@@ -8,7 +12,7 @@ import re
 
 # --- SETUP ---
 device = "cuda" if torch.cuda.is_available() else "cpu"
-print(f"Using device: {device}")
+print(f"Starting duplicate_audio.py - Using device: {device}")
 
 # --- LIGHTWEIGHT AUDIO PREPROCESSING ---
 def preprocess_audio(input_path, output_path):
