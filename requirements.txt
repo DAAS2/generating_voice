@@ -13,4 +13,6 @@ noisereduce
 librosa
 numpy
 gtts
+pydub
+
 
