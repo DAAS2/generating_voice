@@ -7,9 +7,11 @@ import time
 import random
 import logging
 
+ # Access the license agreement from secrets
+license_agreement = st.secrets.coqui_license.agreement
 # Automatically agree to the non-commercial terms
-os.environ["COQUI_LICENSE"] = "non-commercial"
-
+if license_agreement == "non-commercial":
+    os.environ["COQUI_LICENSE"] = "non-commercial"
 # Configure logging for Streamlit app
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
