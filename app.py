@@ -2,6 +2,17 @@
 
 import streamlit as st
 import os
+import builtins
+
+_real_input = builtins.input
+
+def patched_input(prompt=""):
+    # Use a distinctive, unique part of the prompt
+    if "Otherwise, I agree to the terms of the non-commercial CPML" in prompt:
+        return "y"
+    return _real_input(prompt)
+
+builtins.input = patched_input
 os.environ["COQUI_LICENSE"] = "non-commercial"
 import google.generativeai as genai
 import time

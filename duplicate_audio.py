@@ -1,12 +1,24 @@
 import os
 import streamlit as st
-import torch
+import builtins
+
+_real_input = builtins.input
+
+def patched_input(prompt=""):
+    # Use a distinctive, unique part of the prompt
+    if "Otherwise, I agree to the terms of the non-commercial CPML" in prompt:
+        return "y"
+    return _real_input(prompt)
+
+builtins.input = patched_input
 os.environ["COQUI_LICENSE"] = "non-commercial"
+
 from TTS.api import TTS
 import soundfile as sf  # For reliable audio saving
 import noisereduce as nr  # Optional
 import librosa  # For audio loading and resampling
 import re
+import torch
 
 # --- SETUP ---
 device = "cuda" if torch.cuda.is_available() else "cpu"
