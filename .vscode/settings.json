@@ -1,4 +1,3 @@
 {
-    "appService.defaultWebAppToDeploy": "/subscriptions/6b253c75-dbb9-4da7-9de1-4f8f89a5eb7c/resourceGroups/AI_Video_Generator/providers/Microsoft.Web/sites/video-generator",
-    "appService.deploySubpath": "."
+    "appService.showBuildDuringDeployPrompt": false
 }

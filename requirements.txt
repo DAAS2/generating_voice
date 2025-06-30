@@ -2,7 +2,7 @@ Flask
 google-genai
 google-generativeai
 moviepy
-whisper
+openai-whisper
 torch
 coqui-tts
 soundfile
@@ -13,3 +13,5 @@ Pillow
 opencv-python
 requests
 gunicorn
+SpeechRecognition
+pyaudio

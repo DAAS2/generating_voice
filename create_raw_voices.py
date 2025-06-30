@@ -6,7 +6,7 @@ import os
 import time
 import json
 import numpy as np
-from scipy import signal
+
 
 # Initialize Gemini (correct API)
 genai.configure(api_key="AIzaSyCjziDNkVf-xuzSdMFMYPGtkS8CeGv3qC4")
