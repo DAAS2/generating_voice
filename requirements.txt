@@ -1,5 +1,7 @@
-Flask
-google-genai
+pip install --upgrade pip
+pyaudio
+SpeechRecognition
+streamlit
 google-generativeai
 moviepy
 openai-whisper
@@ -9,9 +11,4 @@ soundfile
 noisereduce
 librosa
 numpy
-Pillow
-opencv-python
-requests
-gunicorn
-SpeechRecognition
-pyaudio
+gtts
