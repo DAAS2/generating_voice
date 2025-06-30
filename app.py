@@ -7,6 +7,9 @@ import time
 import random
 import logging
 
+# Automatically agree to the non-commercial terms
+os.environ["COQUI_LICENSE"] = "non-commercial"
+
 # Configure logging for Streamlit app
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
