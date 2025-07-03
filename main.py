@@ -69,8 +69,11 @@ def generate():
             return jsonify({'error': 'Audio generation failed'}), 500
         
         # Generate the video
+        today_str = time.strftime('%Y-%m-%d')
+        date_dir = f"static/generated/{today_str}"
+        os.makedirs(date_dir, exist_ok=True)
         output_filename = f"video_{int(time.time())}.mp4"
-        output_path = f"static/generated/{output_filename}"
+        output_path = f"{date_dir}/{output_filename}"
         
         generate_video(
             video_path=f"downloads/{backdrop}",
@@ -80,7 +83,7 @@ def generate():
         )
         
         # Return the URL to the generated video
-        video_url = f"/static/generated/{output_filename}"
+        video_url = f"/{output_path}"
         return jsonify({
             'success': True,
             'video_url': video_url
@@ -101,8 +104,11 @@ def generate_batch():
             return jsonify({'error': 'Missing required parameters'}), 400
         
         # Prepare batch output directory
+        today_str = time.strftime('%Y-%m-%d')
+        date_dir = f"static/generated/{today_str}"
+        os.makedirs(date_dir, exist_ok=True)
         batch_id = int(time.time())
-        batch_dir = f"static/generated/batch_{batch_id}"
+        batch_dir = f"{date_dir}/batch_{batch_id}"
         os.makedirs(batch_dir, exist_ok=True)
         
         # Use a random script for each video, but the same audio

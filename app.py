@@ -24,30 +24,21 @@ logger.info(f"Ensured video directory exists: {VIDEOS_DIR}")
 # Add 'persist=True' to keep the cache across reruns, but we'll clear it manually on upload.
 @st.cache_data(persist=True)
 def get_uploaded_videos_by_date():
-    """Organizes uploaded videos by their modification date."""
+    """Organizes uploaded videos by their modification date (now by folder)."""
     videos_by_date = {}
     if not os.path.exists(VIDEOS_DIR):
         return {}
-    
-    video_files = [f for f in os.listdir(VIDEOS_DIR) if f.lower().endswith(('.mp4', '.avi', '.mov', '.mkv', '.webm'))]
-    
-    for video_file in video_files:
-        file_path = os.path.join(VIDEOS_DIR, video_file)
-        try:
-            # Get last modification time (useful for tracking when they were uploaded/added)
-            timestamp = os.path.getmtime(file_path) # Changed to getmtime for consistency with typical file operations
-            date = datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d')
-            
-            if date not in videos_by_date:
-                videos_by_date[date] = []
-            videos_by_date[date].append(video_file)
-        except Exception as e:
-            logger.error(f"Could not get date for video {video_file}: {e}")
-            
+    # Each subfolder is a date
+    for date_folder in os.listdir(VIDEOS_DIR):
+        date_folder_path = os.path.join(VIDEOS_DIR, date_folder)
+        if not os.path.isdir(date_folder_path):
+            continue
+        video_files = [f for f in os.listdir(date_folder_path) if f.lower().endswith(('.mp4', '.avi', '.mov', '.mkv', '.webm'))]
+        if video_files:
+            videos_by_date[date_folder] = video_files
     # Sort dates in descending order (most recent first)
     sorted_dates = sorted(videos_by_date.keys(), reverse=True)
-    sorted_videos_by_date = {date: sorted(videos_by_date[date]) for date in sorted_dates} # Sort videos within each date
-    
+    sorted_videos_by_date = {date: sorted(videos_by_date[date]) for date in sorted_dates}
     return sorted_videos_by_date
 
 def create_zip_archive(files_to_zip, zip_filename="videos.zip"):
@@ -87,14 +78,15 @@ with tab1:
     if uploaded_files:
         # Counter for successful uploads in this session
         successful_uploads_count = 0
+        today_str = datetime.now().strftime('%Y-%m-%d')
+        today_folder = os.path.join(VIDEOS_DIR, today_str)
+        os.makedirs(today_folder, exist_ok=True)
         for uploaded_file in uploaded_files:
-            file_path = os.path.join(VIDEOS_DIR, uploaded_file.name)
-            
+            file_path = os.path.join(today_folder, uploaded_file.name)
             # Check if file already exists to avoid overwriting or redundant messages
             if os.path.exists(file_path):
                 st.info(f"File '{uploaded_file.name}' already exists. Skipping upload.")
                 continue # Skip to the next file
-
             try:
                 with open(file_path, "wb") as f:
                     f.write(uploaded_file.getbuffer())
@@ -104,7 +96,6 @@ with tab1:
             except Exception as e:
                 st.error(f"Error uploading '{uploaded_file.name}': {e}")
                 logger.error(f"Error uploading {uploaded_file.name}: {e}")
-        
         # --- Crucial Fix: Clear the cache after successful uploads ---
         if successful_uploads_count > 0:
             st.cache_data.clear() # Clears the cache for all functions decorated with @st.cache_data
@@ -126,11 +117,9 @@ with tab2:
             expander_label = f"📁 Videos from {date} ({len(video_list)} videos)"
             # Use a unique key for each expander
             with st.expander(expander_label, expanded=False): # Set expanded=False to keep them collapsed initially
-                
                 # Option to download all videos for this day as a ZIP
-                zip_files_paths = [os.path.join(VIDEOS_DIR, video) for video in video_list]
+                zip_files_paths = [os.path.join(VIDEOS_DIR, date, video) for video in video_list]
                 zip_data, zip_filename = create_zip_archive(zip_files_paths, f"{date}_videos.zip")
-                
                 if zip_data:
                     st.download_button(
                         label=f"Download All Videos from {date} as ZIP",
@@ -141,17 +130,13 @@ with tab2:
                     )
                 else:
                     st.warning(f"Could not create ZIP for {date}. No files found to zip.")
-                
                 st.markdown("---") # Separator
                 st.subheader(f"Individual Videos for {date}:")
-
                 for video_name in video_list:
-                    video_path = os.path.join(VIDEOS_DIR, video_name)
+                    video_path = os.path.join(VIDEOS_DIR, date, video_name)
                     st.write(f"**{video_name}**")
-                    
                     # Display video
                     st.video(video_path, format="video/mp4", start_time=0)
-                    
                     # Individual download button
                     with open(video_path, "rb") as file:
                         st.download_button(
@@ -159,6 +144,6 @@ with tab2:
                             data=file,
                             file_name=video_name,
                             mime="video/mp4",
-                            key=f"download_single_{video_name}" # Ensure unique key for each button
+                            key=f"download_single_{date}_{video_name}" # Ensure unique key for each button
                         )
                     st.markdown("---") # Separator between videos
