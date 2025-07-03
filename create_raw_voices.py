@@ -169,8 +169,8 @@ def create_ai_voices(script, output_file="audios/final_output.mp3", reference_au
         
         # Save word timings to JSON
         timings_file = "word_timings.json"
-        with open(timings_file, 'w') as f:
-            json.dump(word_timings, f, indent=2)
+        with open(timings_file, 'w', encoding='utf-8') as f:
+            json.dump(word_timings, f, indent=2, ensure_ascii=False)
         
         print(f"✅ High-quality audio saved to {output_file}")
         print(f"✅ Word timings saved to {timings_file}")

@@ -1,5 +1,3 @@
-
-
 from flask import Flask, render_template, request, jsonify, send_file, send_from_directory
 import os
 from google import generativeai as genai
@@ -60,27 +58,12 @@ def generate():
         if not all([prompt, voice, backdrop]):
             return jsonify({'error': 'Missing required parameters'}), 400
             
-        # Save the prompt to a temporary file
-        with open('temp_script.txt', 'w') as f:
+        # Save the prompt to a temporary file (fix Unicode error)
+        with open('temp_script.txt', 'w', encoding='utf-8') as f:
             f.write(prompt)
         
-        # Duplicate the audio using the selected voice
-        # Temporarily swap the reference audio to the selected voice
-        reference_audio_path = f"audios/{voice}"
-        temp_reference = "audios/final_output.wav"
-        backup_reference = None
-        if os.path.exists(temp_reference):
-            backup_reference = temp_reference + ".bak"
-            os.rename(temp_reference, backup_reference)
-        os.rename(reference_audio_path, temp_reference)
-        
-        # Generate the cloned audio
+        # Generate the cloned audio (no need to swap reference audio)
         audio_file = duplicate_audio(prompt)
-        
-        # Restore the original reference audio
-        os.rename(temp_reference, reference_audio_path)
-        if backup_reference:
-            os.rename(backup_reference, temp_reference)
         
         if not audio_file:
             return jsonify({'error': 'Audio generation failed'}), 500
@@ -122,26 +105,12 @@ def generate_batch():
         batch_dir = f"static/generated/batch_{batch_id}"
         os.makedirs(batch_dir, exist_ok=True)
         
-        # Prepare audio (use the selected voice, only once)
-        reference_audio_path = f"audios/{voice}"
-        temp_reference = "audios/final_output.wav"
-        backup_reference = None
-        if os.path.exists(temp_reference):
-            backup_reference = temp_reference + ".bak"
-            os.rename(temp_reference, backup_reference)
-        os.rename(reference_audio_path, temp_reference)
-        
         # Use a random script for each video, but the same audio
-        # Generate the cloned audio ONCE
+        # Generate the cloned audio ONCE (no need to swap reference audio)
         prompt = data.get('prompt')
         if not prompt:
             prompt = generate_viral_conversation()
         audio_file = duplicate_audio(prompt)
-        
-        # Restore the original reference audio
-        os.rename(temp_reference, reference_audio_path)
-        if backup_reference:
-            os.rename(backup_reference, temp_reference)
         
         if not audio_file:
             return jsonify({'error': 'Audio generation failed'}), 500
