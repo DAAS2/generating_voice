@@ -25,38 +25,7 @@ Before you begin, ensure you have the following installed:
 
     ffmpeg (a command-line tool for video and audio processing, required by moviepy). Ensure it's installed and accessible in your system's PATH.
 
-📁 Project Structure
 
-Your project directory should be structured as follows:
-
-.
-├── app.py                      # Main Flask application
-├── wsgi.py                     # WSGI entry point for production servers (like Gunicorn)
-├── requirements.txt            # Python dependencies
-├── create_raw_voices.py        # Module for generating viral conversations and creating AI voices
-├── duplicate_audio.py          # Module for duplicating audio using a reference voice
-├── generate_video.py           # Module for generating video from script, audio, and backdrop
-├── audios/                     # Directory for reference audio files (e.g., voice samples)
-│   └── your_voice_sample.wav
-│   └── final_output.wav        # Used for temporary audio swapping
-├── downloads/                  # Directory for video backdrop files
-│   └── your_backdrop_video.mp4
-├── static/                     # Static files (CSS, JS, images)
-│   └── generated/              # Directory for generated video outputs
-│       └── video_12345.mp4
-│       └── batch_67890/
-│           └── video_67890_1.mp4
-│           └── ...
-├── templates/                  # HTML templates for Flask
-│   └── index.html
-├── temp_script.txt             # Temporary file for storing prompts (managed by app.py)
-├── final_output.mp3            # Potentially an output from voice generation (used in app.py logic)
-├── test_movie.py               # (If exists) - for testing video generation
-├── test.py                     # (If exists) - for general testing
-├── todo.txt                    # (If exists) - project notes
-├── transcription_cache.json    # (If exists) - cache for transcriptions
-├── WavaAI_Video.mp4            # (If exists) - example output or source
-└── word_timings.json           # (If exists) - for video synchronization
 
 🚀 Installation (Local Development)
 
@@ -232,4 +201,4 @@ The application provides a web interface (via the / route) and several API endpo
 Contributions are welcome! Please feel free to fork the repository, open issues, and submit pull requests.
 📄 License
 
-This project is licensed under the MIT License - see the LICENSE file for details. (Create a LICENSE file in your repository if you haven't already).
+
